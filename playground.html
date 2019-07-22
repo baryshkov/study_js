@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+        function getCost(price, count) {
+          count = count || 1;
+          return price * count;
+        }
+
+        let ss = getCost(49.99, 0);
+
+        function somethingNew(lol) {
+
+        }
+        //TODO : именованные аргументы – передача объекта как аргумента.
+        //
+      // function User(fullName) {
+      //   this.fullName = fullName;
+      //
+      //   Object.defineProperties(this, {
+      //
+      //     firstName: {
+      //
+      //       get: function() {
+      //         return this.fullName.split(' ')[0];
+      //       },
+      //
+      //       set: function(newFirstName) {
+      //         this.fullName = newFirstName + ' ' + this.lastName;
+      //       },
+      //
+      //     },
+      //
+      //     lastName: {
+      //
+      //       get: function() {
+      //         return this.fullName.split(' ')[1];
+      //       },
+      //
+      //       set: function(newLastName) {
+      //         this.fullName = this.firstName + ' ' + newLastName;
+      //       },
+      //
+      //     },
+      //
+      //   });
+        // Object.defineProperties(this, {
+        //     firstName: {
+        //         get: function () {
+        //             return this.fullName.split(' ')[0];
+        //         },
+        //         set: function (value) {
+        //             let newFullname = this.fullName.split(' ');
+        //             newFullname[0] = value;
+        //             this.fullName = newFullname.join(' ');
+        //         },
+        //     },
+        //         lastName: {
+        //             get: function() {
+        //                 return this.fullName.split(' ')[1];
+        //             },
+        //             set: function(value) {
+        //                 let newFullname = this.fullName.split(' ');
+        //                 newFullname[1] = value;
+        //                 this.fullName = newFullname.join(' ');
+        //             }
+        //         }
+        // });
+      // }
+
+      // var vasya = new User('Василий Попкин');
+
+      // Object.defineProperties(vasya, {
+      //    firstName: {
+      //        get: function () {
+      //            return this.fullName.split(' ')[0];
+      //        },
+      //        set: function (value) {
+      //            let newFullname = this.fullName.split(' ');
+      //            newFullname[0] = value;
+      //            this.fullName = newFullname.join(' ');
+      //        }
+      //    },
+      //        lastName: {
+      //            get: function() {
+      //                return this.fullName.split(' ')[1];
+      //            },
+      //            set: function(value) {
+      //                let newFullname = this.fullName.split(' ');
+      //                newFullname[1] = value;
+      //                this.fullName = newFullname.join(' ');
+      //            }
+      //        }
+      // });
+      // чтение firstName/lastName
+      // alert(vasya.firstName); // Василий
+      // alert(vasya.lastName); // Попкин
+      //
+      // // запись в lastName
+      // vasya.lastName = 'Сидоров';
+      //
+      // alert(vasya.fullName); // Василий Сидоров
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
