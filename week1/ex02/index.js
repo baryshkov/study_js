@@ -9,9 +9,9 @@ module.exports = function (hours, minutes, interval) {
     newMinutes = newMinutes >= 1440 ? newMinutes % 1440 : newMinutes;
     let retHours = Math.floor(newMinutes / 60);
     let retMinutes = newMinutes % 60;
-    if (retHours === 0)
-      retHours = '00';
-    if (retMinutes === 0)
-      retMinutes = '00';
+    if (retHours < 10)
+      retHours = '0' + retHours;
+    if (retMinutes < 10)
+      retMinutes = '0' + retMinutes;
     return (retHours + ':' + retMinutes);
 };
