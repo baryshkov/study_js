@@ -5,112 +5,197 @@
     <title>Title</title>
     <script src="learnJs.js"></script>
     <script>
+      var phoneBook = function (command) {
+        var arr = command.split(' ');
+        var commandName = arr[0];
+        switch (commandName) {
+          case 'ADD':
+            add(arr);
+            break;
+          case 'REMOVE_PHONE':
+            return(remove(arr));
+          case 'SHOW':
+            return convert();
+        }
 
-      var friends = [
-        {
-          name: 'Сэм',
-          gender: 'Мужской',
-          email: 'luisazamora@example.com',
-          favoriteFruit: 'Картофель'
-        },
-        {
-          name: 'Эмили',
-          gender: 'Женский',
-          email: 'example@example.com',
-          favoriteFruit: 'Яблоко'
-        },
-        {
-          name: 'Мэт',
-          gender: 'Мужской',
-          email: 'danamcgee@example.com',
-          favoriteFruit: 'Яблоко'
-        },
-        {
-          name: 'Брэд',
-          gender: 'Мужской',
-          email: 'newtonwilliams@example.com',
-          favoriteFruit: 'Банан'
-        },
-        {
-          name: 'Шерри',
-          gender: 'Женский',
-          email: 'danamcgee@example.com',
-          favoriteFruit: 'Картофель'
-        },
-        {
-          name: 'Керри',
-          gender: 'Женский',
-          email: 'danamcgee@example.com',
-          favoriteFruit: 'Апельсин'
-        },
-        {
-          name: 'Стелла',
-          gender: 'Женский',
-          email: 'waltersguzman@example.com',
-          favoriteFruit: 'Картофель'
-        }
-      ];
-
-      function query(collection) {
-        // let finalCollection = [];
-        let argv = [].slice.call(arguments);
-        console.log(argv);
-        for (let i = 1; i < argv.length; i++) {
-          if (argv[i].name === 'filter') {
-            let apply = argv[i];
-            collection = apply(collection);
-          }
-        }
-        for (let i = 1; i < argv.length; i++) {
-          if (argv[i].name === 'select') {
-            let apply = argv[i];
-            collection = apply(collection);
-          }
-        }
-        return collection;
-      }
-
-      function select() {
-        let fields = [];
-        for (let i = 0; i < arguments.length; i++) {
-          fields[i] = arguments[i];
-        }
-        return function select(collection) {
-          let newCollection = [];
-          for (let i = 0; i < collection.length; i++) {
-            var newObj = {};
-            for (let j = 0; j < fields.length; j++) {
-              newObj[fields[j]] = collection[i][fields[j]];
+        function convert() {
+          var resArray = [];
+          var j = 0;
+          var array = Object.keys(phoneBook).map(function (key) {
+            return [key, phoneBook[key]];
+          });
+          // console.log('lol', array);
+          for (let i = 0; i < array.length; i++, j += 2) {
+            if (array[i][1] !== null) {
+              resArray[i] = array[i][0] + ': ' + array[i][1];
             }
-            newCollection.push(newObj);
           }
-          return newCollection;
+          return resArray.sort();
         }
-      }
 
-      function filterIn(property, values) {
-        return function filter(collection) {
-          let newCollection = [];
-          for (let i = 0; i < collection.length; i++) {
-            let newObj = {};
-            for (let j = 0; j < values.length; j++) {
-              if (collection[i][property] === values[j]) {
-                newObj = collection[i];
-                newCollection.push(newObj);
+        function add(arr) {
+          if (arr[2].includes(',')) {
+            arr[2] = arr[2].split(',').join(', ');
+          }
+          if (phoneBook[arr[1]] === undefined || phoneBook[arr[1]] === null)
+            phoneBook[arr[1]] = arr[2];
+          else
+            phoneBook[arr[1]] += ', ' + arr[2];
+          return convert();
+        }
+        function remove(arr) {
+          function isEmpty(obj) {
+            for (let key in obj) {
+              return false;
+            }
+            return true;
+          }
+          var newStr;
+          var counter = 0;
+          let costil = 0;
+          if (isEmpty(phoneBook))
+            return false;
+          for (var key in phoneBook) {
+            if (phoneBook[key] !== null && phoneBook[key].includes(arr[1])) {
+              if (phoneBook[key].includes(',')) {
+                newStr = phoneBook[key].split(', ').filter(function (name) {
+                  if (name === arr[1])
+                    costil++;
+                  return name !== arr[1];
+                }).join(', ');
+                phoneBook[key] = newStr;
               }
+              else {
+                phoneBook[key] = null;
+              }
+              return costil > 0;
             }
+            counter++;
           }
-          return newCollection;
+          if (counter === 0)
+            return false;
         }
-      }
+      };
+      phoneBook('ADD Ivan 555,666');
+      phoneBook('ADD Alex 777');
+      phoneBook('ADD Alex 333');
+      phoneBook('REMOVE_PHONE 555');
+      phoneBook('REMOVE_PHONE 666');
+      phoneBook('REMOVE_PHONE 333');
+      phoneBook('REMOVE_PHONE 777');
+      console.info(phoneBook('SHOW'));
+      // REMOVE_PHONE 555; REMOVE_PHONE 666; ADD Ivan 888; SHOW
+      // console.info(phoneBook('REMOVE_PHONE 66'));
+      // console.info(phoneBook('SHOW'));
 
-      var bestFriends = query(
-          friends,
-          select('name', 'gender', 'email'),
-          filterIn('favoriteFruit', ['Яблоко', 'Картофель'])
-      );
 
-      console.info(bestFriends);
+
+
+
+      // var friends = [
+      //   {
+      //     name: 'Сэм',
+      //     gender: 'Мужской',
+      //     email: 'luisazamora@example.com',
+      //     favoriteFruit: 'Картофель'
+      //   },
+      //   {
+      //     name: 'Эмили',
+      //     gender: 'Женский',
+      //     email: 'example@example.com',
+      //     favoriteFruit: 'Яблоко'
+      //   },
+      //   {
+      //     name: 'Мэт',
+      //     gender: 'Мужской',
+      //     email: 'danamcgee@example.com',
+      //     favoriteFruit: 'Яблоко'
+      //   },
+      //   {
+      //     name: 'Брэд',
+      //     gender: 'Мужской',
+      //     email: 'newtonwilliams@example.com',
+      //     favoriteFruit: 'Банан'
+      //   },
+      //   {
+      //     name: 'Шерри',
+      //     gender: 'Женский',
+      //     email: 'danamcgee@example.com',
+      //     favoriteFruit: 'Картофель'
+      //   },
+      //   {
+      //     name: 'Керри',
+      //     gender: 'Женский',
+      //     email: 'danamcgee@example.com',
+      //     favoriteFruit: 'Апельсин'
+      //   },
+      //   {
+      //     name: 'Стелла',
+      //     gender: 'Женский',
+      //     email: 'waltersguzman@example.com',
+      //     favoriteFruit: 'Картофель'
+      //   }
+      // ];
+      //
+      // function query(collection) {
+      //   // let finalCollection = [];
+      //   let argv = [].slice.call(arguments);
+      //   for (let i = 1; i < argv.length; i++) {
+      //     if (argv[i].name === 'filter') {
+      //       let apply = argv[i];
+      //       collection = apply(collection);
+      //     }
+      //   }
+      //   for (let i = 1; i < argv.length; i++) {
+      //     if (argv[i].name === 'select') {
+      //       let apply = argv[i];
+      //       collection = apply(collection);
+      //     }
+      //   }
+      //   return collection;
+      // }
+      //
+      // function select() {
+      //   let fields = [];
+      //   for (let i = 0; i < arguments.length; i++) {
+      //     fields[i] = arguments[i];
+      //   }
+      //   return function select(collection) {
+      //     let newCollection = [];
+      //     for (let i = 0; i < collection.length; i++) {
+      //       var newObj = {};
+      //       for (let j = 0; j < fields.length; j++) {
+      //         newObj[fields[j]] = collection[i][fields[j]];
+      //       }
+      //       newCollection.push(newObj);
+      //     }
+      //     return newCollection;
+      //   }
+      // }
+      //
+      // function filterIn(property, values) {
+      //   return function filter(collection) {
+      //     let newCollection = [];
+      //     for (let i = 0; i < collection.length; i++) {
+      //       let newObj = {};
+      //       for (let j = 0; j < values.length; j++) {
+      //         if (collection[i][property] === values[j]) {
+      //           newObj = collection[i];
+      //           newCollection.push(newObj);
+      //         }
+      //       }
+      //     }
+      //     return newCollection;
+      //   }
+      // }
+      //
+      // var bestFriends = query(
+      //     friends,
+      //     select('name', 'gender', 'email'),
+      //     filterIn('favoriteFruit', ['Яблоко', 'Картофель'])
+      // );
+      //
+      // console.info(bestFriends);
       // var kkk = select('name', 'email');
       // console.log(kkk(friends));
       //TODO : именованные аргументы – передача объекта как аргумента.
