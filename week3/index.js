@@ -7,13 +7,15 @@ module.exports = function (date) {
     if (sign === '-') {
       num *= -1;
     }
-    // console.info(/^hours$/i.test(format));
     switch (true) {
       case /^minutes$/i.test(format):
         value.setUTCMinutes(value.getUTCMinutes() + num);
         break;
       case /^hours$/i.test(format):
+        value.getUTCHours();
         value.setUTCHours(value.getUTCHours() + num);
+        value.getUTCHours();
+
         break;
       case /^days$/i.test(format):
         value.setUTCDate(value.getUTCDate() + num);
@@ -35,24 +37,29 @@ module.exports = function (date) {
   }
 
   function formatDate(date) {
-    return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '
-        + date.getHours() + ':' + date.getMinutes());
+    let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+    let month = date.getMonth + 1 >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
+    let hours = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
+    let minutes = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
+    // return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '
+    //     + date.getHours() + ':' + date.getMinutes());
+    return (date.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes);
   }
 
-  var time = new Date(date);
   return {
-    // time = new Date(date),
-    // tt: console.log(this.time),
+    time: new Date(date),
     add: function (num, format) {
       check(num, format);
-      convertAndSet(num, format, '+', time);
+      convertAndSet(num, format, '+', this.time);
       return this;
     },
     subtract: function (num, format) {
       check(num, format);
-      convertAndSet(num, format, '-', time);
+      convertAndSet(num, format, '-', this.time);
       return this;
     },
-    value: formatDate(time)
+    get value() {
+      return (formatDate(this.time));
+    },
   };
 };

@@ -5,85 +5,155 @@
     <title>Title</title>
     <script src="learnJs.js"></script>
     <script>
-      var phoneBook = function (command) {
-        var arr = command.split(' ');
-        var commandName = arr[0];
-        switch (commandName) {
-          case 'ADD':
-            add(arr);
-            break;
-          case 'REMOVE_PHONE':
-            return(remove(arr));
-          case 'SHOW':
-            return convert();
-        }
 
-        function convert() {
-          var resArray = [];
-          var j = 0;
-          var array = Object.keys(phoneBook).map(function (key) {
-            return [key, phoneBook[key]];
-          });
-          // console.log('lol', array);
-          for (let i = 0; i < array.length; i++, j += 2) {
-            if (array[i][1] !== null) {
-              resArray[i] = array[i][0] + ': ' + array[i][1];
+        var date = function (date) {
+          function convertAndSet(num, format, sign, value) {
+            if (sign === '-') {
+              num *= -1;
             }
-          }
-          return resArray.sort();
-        }
+            switch (true) {
+              case /^minutes$/i.test(format):
+                value.setUTCMinutes(value.getUTCMinutes() + num);
+                break;
+              case /^hours$/i.test(format):
+                value.getUTCHours();
+                value.setUTCHours(value.getUTCHours() + num);
+                value.getUTCHours();
 
-        function add(arr) {
-          if (arr[2].includes(',')) {
-            arr[2] = arr[2].split(',').join(', ');
-          }
-          if (phoneBook[arr[1]] === undefined || phoneBook[arr[1]] === null)
-            phoneBook[arr[1]] = arr[2];
-          else
-            phoneBook[arr[1]] += ', ' + arr[2];
-          return convert();
-        }
-        function remove(arr) {
-          function isEmpty(obj) {
-            for (let key in obj) {
-              return false;
+                break;
+              case /^days$/i.test(format):
+                value.setUTCDate(value.getUTCDate() + num);
+                break;
+              case /^months$/i.test(format):
+                value.setUTCMonth(value.getUTCMonth() + num);
+                break;
+              case /^years$/i.test(format):
+                value.setUTCFullYear(value.getUTCFullYear() + num);
+                break;
             }
-            return true;
           }
-          var newStr;
-          var counter = 0;
-          let costil = 0;
-          if (isEmpty(phoneBook))
-            return false;
-          for (var key in phoneBook) {
-            if (phoneBook[key] !== null && phoneBook[key].includes(arr[1])) {
-              if (phoneBook[key].includes(',')) {
-                newStr = phoneBook[key].split(', ').filter(function (name) {
-                  if (name === arr[1])
-                    costil++;
-                  return name !== arr[1];
-                }).join(', ');
-                phoneBook[key] = newStr;
-              }
-              else {
-                phoneBook[key] = null;
-              }
-              return costil > 0;
+
+          function check(num, format) {
+            if (!num || !format || num < 0 ||
+                format.search(/^(months|days|hours|minutes|years)$/i) === -1) {
+              throw new TypeError('Incorrect data');
             }
-            counter++;
           }
-          if (counter === 0)
-            return false;
-        }
-      };
-      phoneBook('ADD Ivan 555,666');
-      phoneBook('ADD Alex 777');
-      phoneBook('ADD Alex 333');
-      phoneBook('REMOVE_PHONE 555');
-      phoneBook('REMOVE_PHONE 666');
-      phoneBook('REMOVE_PHONE 333');
-      phoneBook('REMOVE_PHONE 777');
-      console.info(phoneBook('SHOW'));
+
+          function formatDate(date) {
+            let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+            let month = date.getMonth + 1 >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
+            let hours = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
+            let minutes = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
+            // return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '
+            //     + date.getHours() + ':' + date.getMinutes());
+            return (date.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes);
+          }
+
+          return {
+            time: new Date(date),
+            add: function (num, format) {
+              check(num, format);
+              convertAndSet(num, format, '+', this.time);
+              return this;
+            },
+            subtract: function (num, format) {
+              check(num, format);
+              convertAndSet(num, format, '-', this.time);
+              return this;
+            },
+            get value() {
+              return (formatDate(this.time));
+            },
+          };
+        };
+
+
+        var time2 = date('2017-05-16 13:45')
+        .add(24, 'hours').subtract(1, 'months').add(3, 'days').add(15, 'minutes');
+        console.log(time2.value);
+
+
+
+      // var phoneBook = function (command) {
+      //   var arr = command.split(' ');
+      //   var commandName = arr[0];
+      //   switch (commandName) {
+      //     case 'ADD':
+      //       add(arr);
+      //       break;
+      //     case 'REMOVE_PHONE':
+      //       return(remove(arr));
+      //     case 'SHOW':
+      //       return convert();
+      //   }
+      //
+      //   function convert() {
+      //     var resArray = [];
+      //     var j = 0;
+      //     var array = Object.keys(phoneBook).map(function (key) {
+      //       return [key, phoneBook[key]];
+      //     });
+      //     // console.log('lol', array);
+      //     for (let i = 0; i < array.length; i++, j += 2) {
+      //       if (array[i][1] !== null) {
+      //         resArray[i] = array[i][0] + ': ' + array[i][1];
+      //       }
+      //     }
+      //     return resArray.sort();
+      //   }
+      //
+      //   function add(arr) {
+      //     if (arr[2].includes(',')) {
+      //       arr[2] = arr[2].split(',').join(', ');
+      //     }
+      //     if (phoneBook[arr[1]] === undefined || phoneBook[arr[1]] === null)
+      //       phoneBook[arr[1]] = arr[2];
+      //     else
+      //       phoneBook[arr[1]] += ', ' + arr[2];
+      //     return convert();
+      //   }
+      //   function remove(arr) {
+      //     function isEmpty(obj) {
+      //       for (let key in obj) {
+      //         return false;
+      //       }
+      //       return true;
+      //     }
+      //     var newStr;
+      //     var counter = 0;
+      //     let costil = 0;
+      //     if (isEmpty(phoneBook))
+      //       return false;
+      //     for (var key in phoneBook) {
+      //       if (phoneBook[key] !== null && phoneBook[key].includes(arr[1])) {
+      //         if (phoneBook[key].includes(',')) {
+      //           newStr = phoneBook[key].split(', ').filter(function (name) {
+      //             if (name === arr[1])
+      //               costil++;
+      //             return name !== arr[1];
+      //           }).join(', ');
+      //           phoneBook[key] = newStr;
+      //         }
+      //         else {
+      //           phoneBook[key] = null;
+      //         }
+      //         return costil > 0;
+      //       }
+      //       counter++;
+      //     }
+      //     if (counter === 0)
+      //       return false;
+      //   }
+      // };
+      // phoneBook('ADD Ivan 555,666');
+      // phoneBook('ADD Alex 777');
+      // phoneBook('ADD Alex 333');
+      // phoneBook('REMOVE_PHONE 555');
+      // phoneBook('REMOVE_PHONE 666');
+      // phoneBook('REMOVE_PHONE 333');
+      // phoneBook('REMOVE_PHONE 777');
+      // console.info(phoneBook('SHOW'));
       // REMOVE_PHONE 555; REMOVE_PHONE 666; ADD Ivan 888; SHOW
       // console.info(phoneBook('REMOVE_PHONE 66'));
       // console.info(phoneBook('SHOW'));
