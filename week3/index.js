@@ -41,8 +41,6 @@ module.exports = function (date) {
     let month = date.getMonth + 1 >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
     let hours = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
     let minutes = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
-    // return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '
-    //     + date.getHours() + ':' + date.getMinutes());
     return (date.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes);
   }
 
