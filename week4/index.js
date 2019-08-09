@@ -33,7 +33,9 @@ function select() {
         for (let i = 0; i < collection.length; i++) {
             var newObj = {};
             for (let j = 0; j < fields.length; j++) {
+                if (collection[i].hasOwnProperty(fields[j])){
                 newObj[fields[j]] = collection[i][fields[j]];
+                }
             }
             newCollection.push(newObj);
         }

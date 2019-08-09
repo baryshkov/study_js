@@ -6,73 +6,162 @@
     <script src="learnJs.js"></script>
     <script>
 
-        var date = function (date) {
-          function convertAndSet(num, format, sign, value) {
-            if (sign === '-') {
-              num *= -1;
-            }
-            switch (true) {
-              case /^minutes$/i.test(format):
-                value.setUTCMinutes(value.getUTCMinutes() + num);
-                break;
-              case /^hours$/i.test(format):
-                value.getUTCHours();
-                value.setUTCHours(value.getUTCHours() + num);
-                value.getUTCHours();
 
-                break;
-              case /^days$/i.test(format):
-                value.setUTCDate(value.getUTCDate() + num);
-                break;
-              case /^months$/i.test(format):
-                value.setUTCMonth(value.getUTCMonth() + num);
-                break;
-              case /^years$/i.test(format):
-                value.setUTCFullYear(value.getUTCFullYear() + num);
-                break;
+      var emitter = {
+
+        events: {},
+        /**
+         * @param {String} event
+         * @param {Object} subscriber
+         * @param {Function} handler
+         */
+        on: function (event, subscriber, handler) {
+          if (!this.events.hasOwnProperty(event)) {
+            this.events[event] = {};
+            this.events[event][handler.name] = [];
+          }
+          if (!this.events[event].hasOwnProperty(handler.name)) {
+            this.events[event][handler.name] = [];
+          }
+          this.events[event][handler.name].push(handler.bind(subscriber));
+          return this;
+        },
+
+        /**
+         * @param {String} event
+         * @param {Object} subscriber
+         */
+        // off: function (event, subscriber) {
+        //   delete this.events[event][subscriber.name];
+        //   return this;
+        // },
+        off: function (event, subscriber) {
+          for (let key in this.events[event]) {
+            console.log(key);
+          debugger
+            // console.log(subscriber.hasOwnProperty(key));
+            // if (subscriber.hasOwnProperty(key)) {
+            //     delete this.events[event][key];
+            //     console.log('1');
+            // }
+          }
+          return this;
+        },
+
+        /**
+         * @param {String} event
+         */
+        emit: function (event) {
+          for (let key in this.events[event]) {
+            for (let i = 0; i < this.events[event][key].length; i++) {
+              this.events[event][key][i]();
             }
           }
+          return this;
+        }
+      };
 
-          function check(num, format) {
-            if (!num || !format || num < 0 ||
-                format.search(/^(months|days|hours|minutes|years)$/i) === -1) {
-              throw new TypeError('Incorrect data');
-            }
-          }
+      var notifications = {
+        counter: 0,
+        count: function () {
+          this.counter++;
+        }
+      };
 
-          function formatDate(date) {
-            let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
-            let month = date.getMonth + 1 >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
-            let hours = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
-            let minutes = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
-            // return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '
-            //     + date.getHours() + ':' + date.getMinutes());
-            return (date.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes);
-          }
+      // Определим для хранения логов
+      var logger = {
+        logs: []
+      };
 
-          return {
-            time: new Date(date),
-            add: function (num, format) {
-              check(num, format);
-              convertAndSet(num, format, '+', this.time);
-              return this;
-            },
-            subtract: function (num, format) {
-              check(num, format);
-              convertAndSet(num, format, '-', this.time);
-              return this;
-            },
-            get value() {
-              return (formatDate(this.time));
-            },
-          };
-        };
-
-
-        var time2 = date('2017-05-16 13:45')
-        .add(24, 'hours').subtract(1, 'months').add(3, 'days').add(15, 'minutes');
-        console.log(time2.value);
-
+      // Подписываемся на событие new_notification и сразу оповещаем всех подписчиков
+      emitter
+      .on('new_notification', notifications, notifications.count)
+      .on('new_notification', logger, function () {
+        this.logs.push('Произошло новое событие new_notification');
+      })
+      .on('new_notification', logger, function () {
+        // this указывает на logger
+        this.logs.push('Добавлена новая нотификация. Количество - ' + notifications.counter);
+      })
+      .emit('new_notification');
+      console.log(notifications.counter);
+      console.log(logger.logs);
+      emitter
+      .off('new_notification', logger)
+      .emit('new_notification')
+      .on('new_notification', logger, function () {
+        this.logs.push('Новое событие new_notification!');
+      })
+      .emit('new_notification');
+      console.log(notifications.counter);
+      console.log(logger.logs);
+        // var date = function (date) {
+        //   function convertAndSet(num, format, sign, value) {
+        //     if (sign === '-') {
+        //       num *= -1;
+        //     }
+        //     switch (true) {
+        //       case /^minutes$/i.test(format):
+        //         value.setUTCMinutes(value.getUTCMinutes() + num);
+        //         break;
+        //       case /^hours$/i.test(format):
+        //         value.getUTCHours();
+        //         value.setUTCHours(value.getUTCHours() + num);
+        //         value.getUTCHours();
+        //
+        //         break;
+        //       case /^days$/i.test(format):
+        //         value.setUTCDate(value.getUTCDate() + num);
+        //         break;
+        //       case /^months$/i.test(format):
+        //         value.setUTCMonth(value.getUTCMonth() + num);
+        //         break;
+        //       case /^years$/i.test(format):
+        //         value.setUTCFullYear(value.getUTCFullYear() + num);
+        //         break;
+        //     }
+        //   }
+        //
+        //   function check(num, format) {
+        //     if (!num || !format || num < 0 ||
+        //         format.search(/^(months|days|hours|minutes|years)$/i) === -1) {
+        //       throw new TypeError('Incorrect data');
+        //     }
+        //   }
+        //
+        //   function formatDate(date) {
+        //     let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
+        //     let month = date.getMonth + 1 >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
+        //     let hours = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
+        //     let minutes = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
+        //     // return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '
+        //     //     + date.getHours() + ':' + date.getMinutes());
+        //     return (date.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes);
+        //   }
+        //
+        //   return {
+        //     time: new Date(date),
+        //     add: function (num, format) {
+        //       check(num, format);
+        //       convertAndSet(num, format, '+', this.time);
+        //       return this;
+        //     },
+        //     subtract: function (num, format) {
+        //       check(num, format);
+        //       convertAndSet(num, format, '-', this.time);
+        //       return this;
+        //     },
+        //     get value() {
+        //       return (formatDate(this.time));
+        //     },
+        //   };
+        // };
+        //
+        //
+        // var time2 = date('2017-05-16 13:45')
+        // .add(24, 'hours').subtract(1, 'months').add(3, 'days').add(15, 'minutes');
+        // console.log(time2.value);
+        //
 
 
       // var phoneBook = function (command) {
