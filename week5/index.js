@@ -2,14 +2,12 @@ module.exports = {
 
     // events: {new_notification:... .. ..}
     events: {},
-    deleteIndexes: [],
     /**
      * @param {String} event
      * @param {Object} subscriber
      * @param {Function} handler
      */
     on: function (event, subscriber, handler) {
-        // this.handlers[subscriber] = handler.name;
         if (!this.events.hasOwnProperty(event)) {
             this.events[event] = [];
         }
@@ -22,6 +20,8 @@ module.exports = {
      * @param {Object} subscriber
      */
     off: function (event, subscriber) {
+        if (!this.events.hasOwnProperty(event))
+            return this;
         this.events[event] = this.events[event].filter(name => name.subscriber !== subscriber);
         return this;
     },
@@ -30,6 +30,8 @@ module.exports = {
      * @param {String} event
      */
     emit: function (event) {
+        if (!this.events.hasOwnProperty(event))
+            return this;
         for (let i = 0; i < this.events[event].length; i++) {
                 this.events[event][i].handler();
             }

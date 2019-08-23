@@ -3,452 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="learnJs.js"></script>
-    <script>
-
-
-      var emitter = {
-
-        events: {},
-        /**
-         * @param {String} event
-         * @param {Object} subscriber
-         * @param {Function} handler
-         */
-        on: function (event, subscriber, handler) {
-          if (!this.events.hasOwnProperty(event)) {
-            this.events[event] = {};
-            this.events[event][handler.name] = [];
-          }
-          if (!this.events[event].hasOwnProperty(handler.name)) {
-            this.events[event][handler.name] = [];
-          }
-          this.events[event][handler.name].push(handler.bind(subscriber));
-          return this;
-        },
-
-        /**
-         * @param {String} event
-         * @param {Object} subscriber
-         */
-        // off: function (event, subscriber) {
-        //   delete this.events[event][subscriber.name];
-        //   return this;
-        // },
-        off: function (event, subscriber) {
-          for (let key in this.events[event]) {
-            console.log(key);
-          debugger
-            // console.log(subscriber.hasOwnProperty(key));
-            // if (subscriber.hasOwnProperty(key)) {
-            //     delete this.events[event][key];
-            //     console.log('1');
-            // }
-          }
-          return this;
-        },
-
-        /**
-         * @param {String} event
-         */
-        emit: function (event) {
-          for (let key in this.events[event]) {
-            for (let i = 0; i < this.events[event][key].length; i++) {
-              this.events[event][key][i]();
-            }
-          }
-          return this;
-        }
-      };
-
-      var notifications = {
-        counter: 0,
-        count: function () {
-          this.counter++;
-        }
-      };
-
-      // Определим для хранения логов
-      var logger = {
-        logs: []
-      };
-
-      // Подписываемся на событие new_notification и сразу оповещаем всех подписчиков
-      emitter
-      .on('new_notification', notifications, notifications.count)
-      .on('new_notification', logger, function () {
-        this.logs.push('Произошло новое событие new_notification');
-      })
-      .on('new_notification', logger, function () {
-        // this указывает на logger
-        this.logs.push('Добавлена новая нотификация. Количество - ' + notifications.counter);
-      })
-      .emit('new_notification');
-      console.log(notifications.counter);
-      console.log(logger.logs);
-      emitter
-      .off('new_notification', logger)
-      .emit('new_notification')
-      .on('new_notification', logger, function () {
-        this.logs.push('Новое событие new_notification!');
-      })
-      .emit('new_notification');
-      console.log(notifications.counter);
-      console.log(logger.logs);
-        // var date = function (date) {
-        //   function convertAndSet(num, format, sign, value) {
-        //     if (sign === '-') {
-        //       num *= -1;
-        //     }
-        //     switch (true) {
-        //       case /^minutes$/i.test(format):
-        //         value.setUTCMinutes(value.getUTCMinutes() + num);
-        //         break;
-        //       case /^hours$/i.test(format):
-        //         value.getUTCHours();
-        //         value.setUTCHours(value.getUTCHours() + num);
-        //         value.getUTCHours();
-        //
-        //         break;
-        //       case /^days$/i.test(format):
-        //         value.setUTCDate(value.getUTCDate() + num);
-        //         break;
-        //       case /^months$/i.test(format):
-        //         value.setUTCMonth(value.getUTCMonth() + num);
-        //         break;
-        //       case /^years$/i.test(format):
-        //         value.setUTCFullYear(value.getUTCFullYear() + num);
-        //         break;
-        //     }
-        //   }
-        //
-        //   function check(num, format) {
-        //     if (!num || !format || num < 0 ||
-        //         format.search(/^(months|days|hours|minutes|years)$/i) === -1) {
-        //       throw new TypeError('Incorrect data');
-        //     }
-        //   }
-        //
-        //   function formatDate(date) {
-        //     let day = date.getDate() >= 10 ? date.getDate() : '0' + date.getDate();
-        //     let month = date.getMonth + 1 >= 10 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1);
-        //     let hours = date.getHours() >= 10 ? date.getHours() : '0' + date.getHours();
-        //     let minutes = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
-        //     // return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' '
-        //     //     + date.getHours() + ':' + date.getMinutes());
-        //     return (date.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + minutes);
-        //   }
-        //
-        //   return {
-        //     time: new Date(date),
-        //     add: function (num, format) {
-        //       check(num, format);
-        //       convertAndSet(num, format, '+', this.time);
-        //       return this;
-        //     },
-        //     subtract: function (num, format) {
-        //       check(num, format);
-        //       convertAndSet(num, format, '-', this.time);
-        //       return this;
-        //     },
-        //     get value() {
-        //       return (formatDate(this.time));
-        //     },
-        //   };
-        // };
-        //
-        //
-        // var time2 = date('2017-05-16 13:45')
-        // .add(24, 'hours').subtract(1, 'months').add(3, 'days').add(15, 'minutes');
-        // console.log(time2.value);
-        //
-
-
-      // var phoneBook = function (command) {
-      //   var arr = command.split(' ');
-      //   var commandName = arr[0];
-      //   switch (commandName) {
-      //     case 'ADD':
-      //       add(arr);
-      //       break;
-      //     case 'REMOVE_PHONE':
-      //       return(remove(arr));
-      //     case 'SHOW':
-      //       return convert();
-      //   }
+<!--    <script src="learnJs.js"></script>-->
+    <script defer>
+      'use strict';
+      // let ask = (question, yes, no) => confirm(question) ? yes() : no();
+      // // ask(
+      // //     "Вы согласны?",
+      // //     () => alert("Вы согласились."),
+      // //     () => alert("Вы отменили выполнение."));
+      // // let gg = new Map();
       //
-      //   function convert() {
-      //     var resArray = [];
-      //     var j = 0;
-      //     var array = Object.keys(phoneBook).map(function (key) {
-      //       return [key, phoneBook[key]];
-      //     });
-      //     // console.log('lol', array);
-      //     for (let i = 0; i < array.length; i++, j += 2) {
-      //       if (array[i][1] !== null) {
-      //         resArray[i] = array[i][0] + ': ' + array[i][1];
-      //       }
-      //     }
-      //     return resArray.sort();
-      //   }
+      // /* http://learn.javascript.ru/map-set   MAP & SET Exercises */
       //
-      //   function add(arr) {
-      //     if (arr[2].includes(',')) {
-      //       arr[2] = arr[2].split(',').join(', ');
-      //     }
-      //     if (phoneBook[arr[1]] === undefined || phoneBook[arr[1]] === null)
-      //       phoneBook[arr[1]] = arr[2];
-      //     else
-      //       phoneBook[arr[1]] += ', ' + arr[2];
-      //     return convert();
-      //   }
-      //   function remove(arr) {
-      //     function isEmpty(obj) {
-      //       for (let key in obj) {
-      //         return false;
-      //       }
-      //       return true;
-      //     }
-      //     var newStr;
-      //     var counter = 0;
-      //     let costil = 0;
-      //     if (isEmpty(phoneBook))
-      //       return false;
-      //     for (var key in phoneBook) {
-      //       if (phoneBook[key] !== null && phoneBook[key].includes(arr[1])) {
-      //         if (phoneBook[key].includes(',')) {
-      //           newStr = phoneBook[key].split(', ').filter(function (name) {
-      //             if (name === arr[1])
-      //               costil++;
-      //             return name !== arr[1];
-      //           }).join(', ');
-      //           phoneBook[key] = newStr;
-      //         }
-      //         else {
-      //           phoneBook[key] = null;
-      //         }
-      //         return costil > 0;
-      //       }
-      //       counter++;
-      //     }
-      //     if (counter === 0)
-      //       return false;
-      //   }
-      // };
-      // phoneBook('ADD Ivan 555,666');
-      // phoneBook('ADD Alex 777');
-      // phoneBook('ADD Alex 333');
-      // phoneBook('REMOVE_PHONE 555');
-      // phoneBook('REMOVE_PHONE 666');
-      // phoneBook('REMOVE_PHONE 333');
-      // phoneBook('REMOVE_PHONE 777');
-      // console.info(phoneBook('SHOW'));
-      // REMOVE_PHONE 555; REMOVE_PHONE 666; ADD Ivan 888; SHOW
-      // console.info(phoneBook('REMOVE_PHONE 66'));
-      // console.info(phoneBook('SHOW'));
-
-
-
-
-
-      // var friends = [
-      //   {
-      //     name: 'Сэм',
-      //     gender: 'Мужской',
-      //     email: 'luisazamora@example.com',
-      //     favoriteFruit: 'Картофель'
-      //   },
-      //   {
-      //     name: 'Эмили',
-      //     gender: 'Женский',
-      //     email: 'example@example.com',
-      //     favoriteFruit: 'Яблоко'
-      //   },
-      //   {
-      //     name: 'Мэт',
-      //     gender: 'Мужской',
-      //     email: 'danamcgee@example.com',
-      //     favoriteFruit: 'Яблоко'
-      //   },
-      //   {
-      //     name: 'Брэд',
-      //     gender: 'Мужской',
-      //     email: 'newtonwilliams@example.com',
-      //     favoriteFruit: 'Банан'
-      //   },
-      //   {
-      //     name: 'Шерри',
-      //     gender: 'Женский',
-      //     email: 'danamcgee@example.com',
-      //     favoriteFruit: 'Картофель'
-      //   },
-      //   {
-      //     name: 'Керри',
-      //     gender: 'Женский',
-      //     email: 'danamcgee@example.com',
-      //     favoriteFruit: 'Апельсин'
-      //   },
-      //   {
-      //     name: 'Стелла',
-      //     gender: 'Женский',
-      //     email: 'waltersguzman@example.com',
-      //     favoriteFruit: 'Картофель'
-      //   }
+      // /* Фильтрация уникальных элементов массива
+      //    Допустим, у нас есть массив arr.
+      //    Создайте функцию unique(arr), которая вернёт массив уникальных, не повторяющихся           значений массива arr. */
+      //
+      // function unique(arr) {
+      //   let set = new Set(arr);
+      //   let res = [];
+      //   set.forEach((value, value2, set1) => {
+      //     res.push(value);
+      //   });
+      //   return res;
+      // }
+      //
+      // let values = ["Hare", "Krishna", "Hare", "Krishna",
+      //   "Krishna", "Krishna", "Hare", "Hare", ":-O"
       // ];
       //
-      // function query(collection) {
-      //   // let finalCollection = [];
-      //   let argv = [].slice.call(arguments);
-      //   for (let i = 1; i < argv.length; i++) {
-      //     if (argv[i].name === 'filter') {
-      //       let apply = argv[i];
-      //       collection = apply(collection);
+      // // alert( unique(values) ); // Hare, Krishna, :-O
+      //
+      // // Отфильтруйте анаграммы
+      //
+      // let arr = ["nap", "teachers", "cheaters", "PAN", "ear", "era", "hectares"];
+      //
+      // // alert( aclean(arr) ); // "nap,teachers,ear" or "PAN,cheaters,era"
+      //
+      //   function aclean(arr) {
+      //     let map = new Map();
+      //     let res = [];
+      //     for (let i = 0; i < arr.length; i++){
+      //       let sorted = arr[i].toLowerCase().split('').sort().join();
+      //       map.set( sorted, arr[i]);
       //     }
-      //   }
-      //   for (let i = 1; i < argv.length; i++) {
-      //     if (argv[i].name === 'select') {
-      //       let apply = argv[i];
-      //       collection = apply(collection);
+      //     for (let unique of map.values()) {
+      //       res.push(unique);
       //     }
+      //     return (res);
       //   }
-      //   return collection;
+      //
+      // let func1 = [],
+      //     func2 = [];
+      //
+      // for (var i = 0; i < 3; i++) {
+      //   debugger;
+      //   func2.push((function(i) { return function() { console.log(++i); } })(i));
+      //   func1.push((function(i) { return function() { console.log(++i); } })(i));
+      //   ++i;
       // }
       //
-      // function select() {
-      //   let fields = [];
-      //   for (let i = 0; i < arguments.length; i++) {
-      //     fields[i] = arguments[i];
-      //   }
-      //   return function select(collection) {
-      //     let newCollection = [];
-      //     for (let i = 0; i < collection.length; i++) {
-      //       var newObj = {};
-      //       for (let j = 0; j < fields.length; j++) {
-      //         newObj[fields[j]] = collection[i][fields[j]];
-      //       }
-      //       newCollection.push(newObj);
-      //     }
-      //     return newCollection;
-      //   }
-      // }
-      //
-      // function filterIn(property, values) {
-      //   return function filter(collection) {
-      //     let newCollection = [];
-      //     for (let i = 0; i < collection.length; i++) {
-      //       let newObj = {};
-      //       for (let j = 0; j < values.length; j++) {
-      //         if (collection[i][property] === values[j]) {
-      //           newObj = collection[i];
-      //           newCollection.push(newObj);
-      //         }
-      //       }
-      //     }
-      //     return newCollection;
-      //   }
-      // }
-      //
-      // var bestFriends = query(
-      //     friends,
-      //     select('name', 'gender', 'email'),
-      //     filterIn('favoriteFruit', ['Яблоко', 'Картофель'])
-      // );
-      //
-      // console.info(bestFriends);
-      // var kkk = select('name', 'email');
-      // console.log(kkk(friends));
-      //TODO : именованные аргументы – передача объекта как аргумента.
-        //
-      // function User(fullName) {
-      //   this.fullName = fullName;
-      //
-      //   Object.defineProperties(this, {
-      //
-      //     firstName: {
-      //
-      //       get: function() {
-      //         return this.fullName.split(' ')[0];
-      //       },
-      //
-      //       set: function(newFirstName) {
-      //         this.fullName = newFirstName + ' ' + this.lastName;
-      //       },
-      //
-      //     },
-      //
-      //     lastName: {
-      //
-      //       get: function() {
-      //         return this.fullName.split(' ')[1];
-      //       },
-      //
-      //       set: function(newLastName) {
-      //         this.fullName = this.firstName + ' ' + newLastName;
-      //       },
-      //
-      //     },
-      //
-      //   });
-        // Object.defineProperties(this, {
-        //     firstName: {
-        //         get: function () {
-        //             return this.fullName.split(' ')[0];
-        //         },
-        //         set: function (value) {
-        //             let newFullname = this.fullName.split(' ');
-        //             newFullname[0] = value;
-        //             this.fullName = newFullname.join(' ');
-        //         },
-        //     },
-        //         lastName: {
-        //             get: function() {
-        //                 return this.fullName.split(' ')[1];
-        //             },
-        //             set: function(value) {
-        //                 let newFullname = this.fullName.split(' ');
-        //                 newFullname[1] = value;
-        //                 this.fullName = newFullname.join(' ');
-        //             }
-        //         }
-        // });
-      // }
+      // func1.forEach(function(func) { func(); });
+      // func2.forEach(function(func) { func(); });
+      document.addEventListener('DOMContentLoaded', (event) => {
+          const button = document.getElementById('hider');
+          const div = document.getElementById('text');
 
-      // var vasya = new User('Василий Попкин');
-
-      // Object.defineProperties(vasya, {
-      //    firstName: {
-      //        get: function () {
-      //            return this.fullName.split(' ')[0];
-      //        },
-      //        set: function (value) {
-      //            let newFullname = this.fullName.split(' ');
-      //            newFullname[0] = value;
-      //            this.fullName = newFullname.join(' ');
-      //        }
-      //    },
-      //        lastName: {
-      //            get: function() {
-      //                return this.fullName.split(' ')[1];
-      //            },
-      //            set: function(value) {
-      //                let newFullname = this.fullName.split(' ');
-      //                newFullname[1] = value;
-      //                this.fullName = newFullname.join(' ');
-      //            }
-      //        }
-      // });
-      // чтение firstName/lastName
-      // alert(vasya.firstName); // Василий
-      // alert(vasya.lastName); // Попкин
-      //
-      // // запись в lastName
-      // vasya.lastName = 'Сидоров';
-      //
-      // alert(vasya.fullName); // Василий Сидоров
+          button.addEventListener('click', () => document.getElementById('text').hidden = true);
+          // или
+          // button.addEventListener('click', () => div.style.setProperty('display', 'none'));
+      });
 
     </script>
 </head>
 <body>
+<input type="button" id="hider" value="Press to Hide text">
+<div id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium doloribus impedit maiores molestias non quod totam? Beatae ea facilis iste</div>
 
 </body>
 </html>
