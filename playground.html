@@ -5,7 +5,75 @@
     <title>Title</title>
 <!--    <script src="learnJs.js"></script>-->
     <script defer>
-      'use strict';
+
+        const f = 'fizz';
+        const b = 'buzz';
+
+        for (let i = 0; i <= 100; i++) {
+            if (!(i % 3) && !(i % 5)) {
+                console.log('i = ' + i + ' ' + f + b);
+            } else if (!(i % 3)) {
+                console.log('i = ' + i + ' ' + f);
+            } else if (!(i % 5)) {
+                console.log('i = ' + i + ' ' + b);
+            }
+        }
+      // 'use strict';
+      //
+      // function logThis() {
+      //     this.name = 'logger';
+      //     console.log(this);
+      // }
+      //
+      // new logThis();
+
+      // function foo() {
+      //     var a = 1;
+      //
+      //     if ( a> 0) {
+      //         var a = 2;
+      //     }
+      //     console.log(a);
+      // }
+      //
+      // foo();
+      // const promise =
+      //         Promise.reject('a').then(x=>x+ 'b').catch(x=>x+'d').catch(x=>x+'e').then(x=>x+'g');
+      // promise.then(x => console.log(x));
+      // for (var i = 0; i < 10; i++) {
+      //     setTimeout(function() {
+      //         console.log(i);
+      //     }, 1000)
+      // }
+      // a = [1,2,3];
+      // b = [4,5,6];
+      //
+      // const fn = (a, b) => [...a, ...b];
+      // console.log(fn(a,b));
+      // function User() {}
+      //     User.prototype = {admin: false};
+      // const user = new User();
+      // User.prototype = {admin: true};
+      // console.log(user.admin);
+      // var name = 'Bob';
+      //
+      // // sayHi(name);
+      //
+      // function sayHi(name) {
+      //     console.log('Hi', name);
+      // }
+      // //
+      // sayHi.bind(null, 'Bob');
+      // for (let i = 3; i > 0; i--) {
+      //     console.log(i)
+      // }
+      //
+      // var i = 3;
+      // while (i>0) {
+      //     console.log(i);
+      //     i--;
+      // }
+
       // let ask = (question, yes, no) => confirm(question) ? yes() : no();
       // // ask(
       // //     "Вы согласны?",
@@ -65,14 +133,14 @@
       //
       // func1.forEach(function(func) { func(); });
       // func2.forEach(function(func) { func(); });
-      document.addEventListener('DOMContentLoaded', (event) => {
-          const button = document.getElementById('hider');
-          const div = document.getElementById('text');
-
-          button.addEventListener('click', () => document.getElementById('text').hidden = true);
+      // document.addEventListener('DOMContentLoaded', (event) => {
+      //     const button = document.getElementById('hider');
+      //     const div = document.getElementById('text');
+      //
+      //     button.addEventListener('click', () => document.getElementById('text').hidden = true);
           // или
           // button.addEventListener('click', () => div.style.setProperty('display', 'none'));
-      });
+      // });
 
     </script>
 </head>
