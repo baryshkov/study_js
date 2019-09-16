@@ -1,4 +1,4 @@
-import { Employee, cadre, tax, benefits, bonus, reimbursement } from './employee-02.js';
+import { Employee, cadre, tax, benefits, bonus, reimbursement } from './01_employee.js';
 
 function getEmployeeInformation(inputSalary) {
   Employee.salary = inputSalary;

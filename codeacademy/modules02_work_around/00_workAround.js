@@ -1,4 +1,4 @@
-import Employee from './employee.js';
+import Employee from './00_employee.js';
 
 function getEmployeeInformation(inputSalary) {
   Employee.salary = inputSalary;
